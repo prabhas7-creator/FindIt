@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F8FAFC] text-[#0F172A] min-h-screen font-sans;
+  }
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Glassmorphism helpers */
+.glass-nav {
+  background: rgba(16, 29, 54, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Button & Card Micro-Interactions */
+.btn-primary {
+  @apply bg-[#101D36] text-white hover:bg-[#1A2B4C] transition-all duration-200 active:scale-[0.98] font-medium shadow-sm hover:shadow;
+}
+
+.btn-accent {
+  @apply bg-[#62D8C3] text-[#101D36] hover:bg-[#4ecbb4] transition-all duration-200 active:scale-[0.98] font-semibold shadow-sm hover:shadow;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card;
+}

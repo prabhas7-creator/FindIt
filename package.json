@@ -1,0 +1,25 @@
+{
+  "name": "lost-and-found-portal",
+  "version": "1.0.0",
+  "description": "FindIt — Lost & Found Portal for college campus communities",
+  "private": true,
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "seed": "cd server && npm run seed",
+    "test": "cd server && npm test",
+    "build:client": "cd client && npm run build",
+    "install:all": "npm --prefix server install && npm --prefix client install"
+  },
+  "keywords": [
+    "findit",
+    "lost-and-found",
+    "react",
+    "express",
+    "mongodb",
+    "fullstack",
+    "college-project"
+  ],
+  "author": "FindIt Developer",
+  "license": "ISC"
+}
