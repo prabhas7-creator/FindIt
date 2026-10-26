@@ -15,26 +15,29 @@ dotenv.config();
 const app = express();
 
 // Allowed origins for CORS (development and production support)
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:3000',
-  process.env.CLIENT_URL,
-].filter(Boolean);
+const normalizeOrigin = (url) => (url ? url.trim().replace(/\/+$/, '') : '');
+const clientUrl = normalizeOrigin(process.env.CLIENT_URL);
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, Postman)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true);
+
+      const normalized = normalizeOrigin(origin);
+
+      const isAllowed =
+        normalized === 'http://localhost:5173' ||
+        normalized === 'http://127.0.0.1:5173' ||
+        normalized === 'http://localhost:3000' ||
+        (clientUrl && normalized === clientUrl) ||
+        normalized.endsWith('.vercel.app') ||
+        process.env.NODE_ENV !== 'production';
+
+      if (isAllowed) {
         callback(null, true);
       } else {
-        // In development, be permissive to avoid port mismatch friction
-        if (process.env.NODE_ENV !== 'production') {
-          callback(null, true);
-        } else {
-          callback(new Error('Blocked by CORS policy'));
-        }
+        callback(new Error(`Blocked by CORS policy for origin: ${origin}`));
       }
     },
     credentials: true,

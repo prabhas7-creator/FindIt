@@ -8,8 +8,11 @@ export const connectDB = async () => {
   try {
     if (uri && !uri.includes('127.0.0.1') && !uri.includes('localhost')) {
       // Direct remote/Atlas connection
-      console.log('Connecting to remote MongoDB (Atlas)...');
-      await mongoose.connect(uri);
+      const sanitizedUri = uri.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@');
+      console.log(`Connecting to remote MongoDB at: ${sanitizedUri}...`);
+      await mongoose.connect(uri, {
+        serverSelectionTimeoutMS: 10000,
+      });
       console.log('MongoDB Atlas connected successfully.');
       return;
     }
@@ -21,7 +24,7 @@ export const connectDB = async () => {
     });
     console.log('Local MongoDB connected successfully.');
   } catch (err) {
-    console.warn('Could not connect to local MongoDB server:', err.message);
+    console.warn('Could not connect to MongoDB server:', err.message);
 
     // Development auto-fallback: In-memory MongoDB so the student can test immediately without installing mongod!
     if (process.env.NODE_ENV !== 'production') {
@@ -38,6 +41,13 @@ export const connectDB = async () => {
         throw err;
       }
     } else {
+      console.error('--------------------------------------------------');
+      console.error('CRITICAL: MongoDB Atlas Connection Failed!');
+      console.error('Error Details:', err.message);
+      console.error('Troubleshooting Steps for Render:');
+      console.error('1. In MongoDB Atlas Network Access, ensure 0.0.0.0/0 is present and active.');
+      console.error('2. In Render Environment Variables, ensure MONGODB_URI has angle brackets removed.');
+      console.error('--------------------------------------------------');
       throw err;
     }
   }
